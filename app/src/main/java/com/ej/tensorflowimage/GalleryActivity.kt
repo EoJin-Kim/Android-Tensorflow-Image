@@ -13,7 +13,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.ej.tensorflowimage.tflite.ClassifierWithModel
+import com.ej.tensorflowimage.tflite.ClassifierWithSupport
 import java.io.IOException
 import java.util.*
 
@@ -22,7 +22,7 @@ class GalleryActivity : AppCompatActivity() {
     val TAG = "[IC]GalleryActivity"
     val GALLERY_IMAGE_REQUEST_CODE = 1
 
-    lateinit var cls : ClassifierWithModel
+    lateinit var cls : ClassifierWithSupport
     lateinit var imageView : ImageView
     lateinit var textView : TextView
 
@@ -38,7 +38,7 @@ class GalleryActivity : AppCompatActivity() {
         imageView = findViewById(R.id.imageView)
         textView = findViewById(R.id.textView)
 
-        cls = ClassifierWithModel(this)
+        cls = ClassifierWithSupport(this)
 
         try {
             cls.init()

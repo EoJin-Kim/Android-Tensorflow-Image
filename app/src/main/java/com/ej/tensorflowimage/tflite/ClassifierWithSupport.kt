@@ -1,11 +1,13 @@
-package com.ej.tensorflowlitetest.tflite
+package com.ej.tensorflowimage.tflite
 
 import android.content.Context
 import android.graphics.Bitmap
+import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.Tensor
 import org.tensorflow.lite.support.common.FileUtil
 import org.tensorflow.lite.support.common.ops.NormalizeOp
+import org.tensorflow.lite.support.image.ColorSpaceType
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
@@ -21,10 +23,11 @@ class ClassifierWithSupport constructor(
 
     lateinit var interpreter : Interpreter
 
+    lateinit var modelInputShape : IntArray
     var modelInputWidth : Int = 0
     var modelInputHeight : Int = 0
     var modelInputChannel : Int = 0
-
+    lateinit var modelInputDataType : DataType
     lateinit var inputImage : TensorImage
     lateinit var outputBuffer : TensorBuffer
     private lateinit var labels : List<String>
@@ -40,11 +43,11 @@ class ClassifierWithSupport constructor(
 
     private fun initModelShape() {
         val inputTensor : Tensor = interpreter.getInputTensor(0)
-        val inputShape = inputTensor.shape()
-        modelInputChannel = inputShape[0]
-        modelInputWidth = inputShape[1]
-        modelInputHeight = inputShape[2]
-
+        modelInputShape = inputTensor.shape()
+        modelInputChannel = modelInputShape[0]
+        modelInputWidth = modelInputShape[1]
+        modelInputHeight = modelInputShape[2]
+        modelInputDataType = inputTensor.dataType()
         inputImage = TensorImage(inputTensor.dataType())
 
         val outputTensor = interpreter.getOutputTensor(0)
@@ -100,7 +103,7 @@ class ClassifierWithSupport constructor(
 
 
     companion object {
-        val MODEL_NAME = "keras_model_cnn.tflite"
+        val MODEL_NAME = "mobilenet_imagenet_model.tflite"
         val LABEL_FILE = "labels.txt"
 
     }
